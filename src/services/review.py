@@ -1,0 +1,59 @@
+from functools import lru_cache
+from src.db.mongo_db import init_db
+from bson.objectid import ObjectId
+
+
+class ReviewService:
+    def __init__(self, mongo):
+        self.mongo_db = mongo
+        self.collection = self.mongo_db.reviews
+        self.ratings_collection = self.mongo_db.reviews_ratings
+        self.likes_collection = self.mongo_db.likes
+
+    async def post_review(self, data, user_data):
+        if self.likes_collection.find_one({"user_id": user_data['id'], "film_id": data.film_id}) is not None:
+            mark = self.likes_collection.find_one({"user_id": user_data['id'], "film_id": data.film_id})['mark']
+        else:
+            mark = 0
+        review_id = self.collection.insert_one(
+            {"user_id": user_data['id'], "user_name": user_data['name'],
+             "film_id": data.film_id, "text": data.text,
+             "publication_date": data.publication_date,
+             "likes": 0, "dislikes": 0, "mark": mark}).inserted_id
+
+        return {'msg': 'Review successfully posted', 'review_id': str(review_id)}
+
+    async def get_all(self, sorting):
+        reviews_list = []
+        for review in self.collection.find(sort=sorting):
+            reviews_list.append({'publication_date': review['publication_date'],
+                                 'film_id': review['film_id'], 'user_id': review['user_id'],
+                                 'user_name': review['user_name'], 'likes': review['likes'],
+                                 'dislikes': review['dislikes'], 'mark': review['mark'],
+                                 'text': review['text']})
+
+        return reviews_list
+
+    async def evaluate_review(self, data, user_id, like: bool):
+        if self.ratings_collection.find_one({"user_id": user_id, "review_id": data.review_id}) is None:
+            if like:
+                likes_count = self.collection.find_one({"_id": ObjectId(data.review_id)})['likes']
+                res = self.collection.find_one_and_update({"_id": ObjectId(data.review_id)},
+                                                          {'$set': {'likes': likes_count + 1}})
+            else:
+                dislikes_count = self.collection.find_one({"_id": ObjectId(data.review_id)})['dislikes']
+                res = self.collection.find_one_and_update({"_id": ObjectId(data.review_id)},
+                                                          {'$set': {'dislikes': dislikes_count + 1}})
+            self.ratings_collection.insert_one({"user_id": user_id, "review_id": data.review_id})
+        else:
+            return {'msg': 'You have already rated this review'}
+        if res:
+            return {'msg': 'Review successfully rated'}
+
+        return {'msg': 'Review not found'}
+
+
+@lru_cache()
+def get_review_service() -> ReviewService:
+    mongo = init_db()
+    return ReviewService(mongo)
