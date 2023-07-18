@@ -3,6 +3,7 @@ from src.api.v1.models.feedback import BookmarkReq
 from src.api.v1.auth.auth_bearer import BaseJWTBearer
 from src.services.bookmark import BookmarkService, get_bookmark_service
 from src.services.auth import AuthApi
+from src.api.v1.utils import Page
 
 router = APIRouter()
 auth_api = AuthApi()
@@ -13,9 +14,12 @@ auth_api = AuthApi()
     description='Просмотр закладок текущего пользователя',
     dependencies=[Depends(BaseJWTBearer())]
 )
-async def get_bookmarks(request: Request, bookmark_service: BookmarkService = Depends(get_bookmark_service)):
+async def get_bookmarks(
+        request: Request,
+        page: Page = Depends(),
+        bookmark_service: BookmarkService = Depends(get_bookmark_service)):
     current_user = request.token_payload
-    bookmarks = await bookmark_service.get_all(current_user['id'])
+    bookmarks = await bookmark_service.get_all(current_user['id'], page)
 
     return bookmarks
 

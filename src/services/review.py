@@ -1,6 +1,7 @@
 from functools import lru_cache
 from src.db.mongo_db import init_db
 from bson.objectid import ObjectId
+from src.api.v1.utils import Page
 
 
 class ReviewService:
@@ -23,9 +24,9 @@ class ReviewService:
 
         return {'msg': 'Review successfully posted', 'review_id': str(review_id)}
 
-    async def get_all(self, sorting):
+    async def get_all(self, sorting, page: Page):
         reviews_list = []
-        for review in self.collection.find(sort=sorting):
+        for review in self.collection.find(sort=sorting).skip(page.page_from):
             reviews_list.append({'publication_date': review['publication_date'],
                                  'film_id': review['film_id'], 'user_id': review['user_id'],
                                  'user_name': review['user_name'], 'likes': review['likes'],

@@ -1,5 +1,6 @@
 from functools import lru_cache
 from src.db.mongo_db import init_db
+from src.api.v1.utils import Page
 
 
 class BookmarkService:
@@ -14,9 +15,9 @@ class BookmarkService:
 
         return {'msg': f'Movie {data.film_id} is already in bookmarks'}
 
-    async def get_all(self, user_id):
+    async def get_all(self, user_id, page: Page):
         bookmarks_list = []
-        for bookmark in self.collection.find({"user_id": user_id}):
+        for bookmark in self.collection.find({"user_id": user_id}).skip(page.page_from):
             bookmarks_list.append(bookmark['film_id'])
 
         return bookmarks_list
@@ -33,5 +34,3 @@ class BookmarkService:
 def get_bookmark_service() -> BookmarkService:
     mongo = init_db()
     return BookmarkService(mongo)
-
-

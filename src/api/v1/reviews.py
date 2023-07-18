@@ -4,6 +4,7 @@ from src.api.v1.auth.auth_bearer import BaseJWTBearer
 from src.services.review import ReviewService, get_review_service
 from src.services.auth import AuthApi
 from src.api.v1.utils import SortReview
+from src.api.v1.utils import Page
 
 router = APIRouter()
 auth_api = AuthApi()
@@ -25,8 +26,9 @@ async def add_review(data: ReviewReq, request: Request,
     '/',
     description='Просмотр списка рецензий'
 )
-async def get_reviews(sort: SortReview = Depends(), review_service: ReviewService = Depends(get_review_service)):
-    reviews = await review_service.get_all(sort.sort)
+async def get_reviews(sort: SortReview = Depends(), page: Page = Depends(),
+                      review_service: ReviewService = Depends(get_review_service)):
+    reviews = await review_service.get_all(sort.sort, page)
 
     return reviews
 
