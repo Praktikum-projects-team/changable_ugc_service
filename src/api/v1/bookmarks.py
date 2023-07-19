@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Request
-from src.api.v1.models.feedback import BookmarkReq
-from src.api.v1.auth.auth_bearer import BaseJWTBearer
-from src.services.bookmark import BookmarkService, get_bookmark_service
-from src.services.auth import AuthApi
-from src.api.v1.utils import Page
+from api.v1.models.feedback import BookmarkReq
+from api.v1.auth.auth_bearer import BaseJWTBearer
+from services.bookmark import BookmarkService, get_bookmark_service
+from services.auth import AuthApi
+from api.v1.utils import Page
 
 router = APIRouter()
 auth_api = AuthApi()

@@ -1,7 +1,7 @@
 from functools import lru_cache
 
 from fastapi import Depends
-from src.db.mongo_db import init_db
+from db.mongo_db import init_db
 
 
 class LikeService:

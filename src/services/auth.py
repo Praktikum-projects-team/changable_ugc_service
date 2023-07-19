@@ -4,7 +4,7 @@ from http import HTTPStatus
 from fastapi import HTTPException
 from httpx import AsyncClient
 
-from src.core.config import AuthConfig
+from core.config import AuthConfig
 
 
 class AuthApi:

@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from src.core.config import mongo_config
+from core.config import mongo_config
 
 client = MongoClient(host=mongo_config.host, port=mongo_config.port)
 

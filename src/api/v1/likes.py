@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, Request
-from src.api.v1.models.feedback import LikeReq, LikeDeleteReq
-from src.api.v1.auth.auth_bearer import BaseJWTBearer
-from src.services.like import LikeService, get_like_service
-from src.services.auth import AuthApi
+from fastapi import APIRouter, Depends, Request, HTTPException
+from http import HTTPStatus
+from api.v1.models.feedback import LikeReq, LikeDeleteReq
+from api.v1.auth.auth_bearer import BaseJWTBearer
+from services.like import LikeService, get_like_service
+from services.auth import AuthApi
 
 router = APIRouter()
 auth_api = AuthApi()
@@ -14,6 +15,8 @@ auth_api = AuthApi()
     dependencies=[Depends(BaseJWTBearer())]
 )
 async def post_like(data: LikeReq, request: Request, like_service: LikeService = Depends(get_like_service)):
+    if data.mark not in [0, 10]:
+        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail='Mark value must be 0 or 10')
     current_user = request.token_payload
     res = await like_service.post_like(data, current_user['id'])
     return res

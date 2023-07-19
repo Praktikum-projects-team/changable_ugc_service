@@ -1,6 +1,6 @@
 from functools import lru_cache
-from src.db.mongo_db import init_db
-from src.api.v1.utils import Page
+from db.mongo_db import init_db
+from api.v1.utils import Page
 
 
 class BookmarkService:

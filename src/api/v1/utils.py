@@ -1,7 +1,7 @@
 from pymongo import DESCENDING, ASCENDING
 from http import HTTPStatus
 from fastapi import HTTPException, Query
-from src.core.config import app_config
+from core.config import app_config
 
 
 class SortReview:

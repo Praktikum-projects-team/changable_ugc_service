@@ -1,7 +1,7 @@
 from functools import lru_cache
-from src.db.mongo_db import init_db
+from db.mongo_db import init_db
 from bson.objectid import ObjectId
-from src.api.v1.utils import Page
+from api.v1.utils import Page
 
 
 class ReviewService:
