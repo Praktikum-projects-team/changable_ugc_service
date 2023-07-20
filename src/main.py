@@ -22,9 +22,9 @@ app = FastAPI(
     default_response_class=ORJSONResponse,
 )
 
-app.include_router(likes.router, prefix='/api/v1/like', tags=['like'])
-app.include_router(bookmarks.router, prefix='/api/v1/bookmark', tags=['bookmark'])
-app.include_router(reviews.router, prefix='/api/v1/review', tags=['review'])
+app.include_router(likes.router, prefix='/api/v1/likes', tags=['likes'])
+app.include_router(bookmarks.router, prefix='/api/v1/bookmarks', tags=['bookmarks'])
+app.include_router(reviews.router, prefix='/api/v1/reviews', tags=['reviews'])
 
 
 @app.exception_handler(RequestError)

@@ -16,3 +16,4 @@ python-dotenv==1.0.0
 aiokafka==0.8.1
 kafka-python==2.0.2
 pymongo==4.4.1
+motor==3.2.0

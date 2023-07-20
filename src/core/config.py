@@ -27,6 +27,7 @@ class MongoConfig(BaseSettings):
     host: str = Field(..., env='MONGO_HOST')
     port: int = Field(..., env='MONGO_PORT')
     db_name: str = Field(..., env='MONGO_DB_NAME')
+    mongo_url: str = Field(..., env='MONGO_URL')
 
 
 app_config = AppConfig()
