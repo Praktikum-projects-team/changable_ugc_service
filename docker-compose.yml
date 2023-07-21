@@ -1,0 +1,41 @@
+version: "3.5"
+
+services:
+  logstash:
+    image: logstash:7.10.1
+    container_name: ugc_logstash
+    command: logstash -f /config/logstash.conf
+    environment:
+      ES_HOST: "elasticsearch:9200"
+    volumes:
+      - ./config/logstash.conf:/config/logstash.conf:ro
+    ports:
+      - "5044:5044/udp"
+    depends_on:
+      - elasticsearch
+    networks:
+      - cinema
+
+  elasticsearch:
+    image: ghcr.io/yp-middle-python-24/elasticsearch:7.10.2
+    container_name: ugc_elasticsearch
+    environment:
+      discovery.type: single-node
+    expose:
+      - 9200
+    networks:
+      - cinema
+
+  kibana:
+    image: ghcr.io/yp-middle-python-24/kibana:7.10.2
+    container_name: ugc_kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - cinema
+
+networks:
+  cinema:
+    name: cinema
