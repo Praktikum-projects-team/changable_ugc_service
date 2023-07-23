@@ -55,3 +55,27 @@ async def dislike_review(data: ReviewLike, request: Request,
     current_user = request.token_payload
     res = await review_service.evaluate_review(data, current_user['id'], False)
     return res
+
+
+@router.delete(
+    '/dislike',
+    description='Удаление дизлайка рецензии',
+    dependencies=[Depends(BaseJWTBearer())]
+)
+async def dislike_review(data: ReviewLike, request: Request,
+                         review_service: ReviewService = Depends(get_review_service)):
+    current_user = request.token_payload
+    res = await review_service.delete_review_evaluation(data, current_user['id'])
+    return res
+
+
+@router.delete(
+    '/like',
+    description='Удаление лайка рецензии',
+    dependencies=[Depends(BaseJWTBearer())]
+)
+async def dislike_review(data: ReviewLike, request: Request,
+                         review_service: ReviewService = Depends(get_review_service)):
+    current_user = request.token_payload
+    res = await review_service.delete_review_evaluation(data, current_user['id'])
+    return res

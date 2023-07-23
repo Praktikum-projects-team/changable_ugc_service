@@ -10,7 +10,7 @@ from tests.functional.utils.routes import AUTH_URL_LOGIN, AUTH_URL_SIGN_UP
 
 @pytest.fixture(scope="session", autouse=True)
 async def create_user_default():
-    requests.post(AUTH_URL_SIGN_UP, headers={"X-Request-Id": "123"}, json={
+    requests.post('http://auth:8000/api/v1/auth/sign_up', headers={"X-Request-Id": "1"}, json={
         'login': UserData.LOGIN,
         'password': UserData.PASSWORD,
         'name': UserData.NAME
@@ -22,7 +22,7 @@ async def create_user_default():
 async def user_access_token():
     resp = requests.post(
         AUTH_URL_LOGIN,
-        headers={"X-Request-Id": "123"},
+        headers={"X-Request-Id": "1"},
         json={
             'login': UserData.LOGIN,
             'password': UserData.PASSWORD

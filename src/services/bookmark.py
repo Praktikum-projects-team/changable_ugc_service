@@ -18,7 +18,7 @@ class BookmarkService:
 
     async def get_all(self, user_id, page: Page):
         bookmarks_list = []
-        async for bookmark in self.collection.find({"user_id": user_id}).skip(page.page_from):
+        async for bookmark in self.collection.find({"user_id": user_id}).skip(page.page_from).limit(page.page_size):
             bookmarks_list.append(bookmark['film_id'])
 
         return bookmarks_list

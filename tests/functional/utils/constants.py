@@ -7,7 +7,7 @@ load_dotenv()
 
 
 class UserData:
-    LOGIN = "user@test.ru"
+    LOGIN = "test@test.ru"
     PASSWORD = "123qwe"
     NAME = "test_user"
 

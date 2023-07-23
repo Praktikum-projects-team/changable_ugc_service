@@ -29,7 +29,7 @@ class ReviewService:
 
     async def get_all(self, sorting, page: Page):
         reviews_list = []
-        async for review in self.collection.find(sort=sorting).skip(page.page_from):
+        async for review in self.collection.find(sort=sorting).skip(page.page_from).limit(page.page_size):
             reviews_list.append({'publication_date': review['publication_date'],
                                  'film_id': review['film_id'], 'user_id': review['user_id'],
                                  'user_name': review['user_name'], 'likes': review['likes'],
@@ -60,6 +60,13 @@ class ReviewService:
             return {'msg': 'Review successfully rated'}
 
         return {'msg': 'Review not found'}
+
+    async def delete_review_evaluation(self, data, user_id):
+        res = await self.ratings_collection.delete_one({"user_id": user_id, "review_id": data.review_id})
+        if res.deleted_count > 0:
+            return {'msg': f'Deleted evaluation from {data.review_id}'}
+
+        return {'msg': 'Evaluation not found'}
 
 
 @lru_cache()
