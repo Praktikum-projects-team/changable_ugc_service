@@ -44,8 +44,8 @@ services:
     volumes:
       - $HOME/postgresql/auth_data:/var/lib/postgresql/auth_api_data
     restart: always
-    ports:
-      - "5432:5432"
+    networks:
+      - cinema
 
   auth_redis:
     container_name: auth_redis
@@ -54,8 +54,8 @@ services:
       - envs/auth/.env
     volumes:
       - $HOME/redis/data:/var/lib/redis/data
-    ports:
-      - "6378:6378"
+    networks:
+      - cinema
 
   auth:
     container_name: auth
@@ -67,35 +67,39 @@ services:
       - auth_postgres
     ports:
       - "8000:8000"
+    networks:
+      - cinema
 
   mongodb:
     container_name: mongodb
     image: mongo:4.4.6
-    ports:
-      - 27017:27017
     volumes:
       - mo_data:/mo_data
+    networks:
+      - cinema
 
   feedback:
     container_name: feedback
     build: .
     env_file:
       - ./.env
-    ports:
-      - "8001:8001"
     depends_on:
       - mongodb
+    networks:
+      - cinema
 
-#  nginx:
-#    container_name: nginx
-#    image: nginx:latest
-#    volumes:
-#      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-#      - ./nginx/configs:/etc/nginx/conf.d:ro
-#    depends_on:
-#      - feedback
-#    ports:
-#      - "80:80"
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/configs:/etc/nginx/conf.d:ro
+    depends_on:
+      - feedback
+    ports:
+      - "80:80"
+    networks:
+      - cinema
 
 volumes:
   mo_data:
