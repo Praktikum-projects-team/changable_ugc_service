@@ -15,7 +15,7 @@ class LikeService:
             await self.collection.insert_one({"user_id": user_id, "film_id": data.film_id, "mark": data.mark})
             return {'msg': f'Posted film score: {data.mark}'}
 
-        return {'msg': f'Like already exists'}
+        return {'msg': 'Like already exists'}
 
     async def update_like(self, data, user_id):
         res = await self.collection.find_one_and_update({"user_id": user_id, "film_id": data.film_id},
@@ -23,7 +23,7 @@ class LikeService:
         if res:
             return {'msg': f'Updated film score to {data.mark}'}
 
-        return {'msg': f'Film score not found'}
+        return {'msg': 'Film score not found'}
 
     async def delete_like(self, data, user_id):
         res = await self.collection.delete_one({"user_id": user_id, "film_id": data.film_id})
