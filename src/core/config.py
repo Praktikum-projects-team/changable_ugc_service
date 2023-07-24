@@ -30,6 +30,11 @@ class MongoConfig(BaseSettings):
     mongo_url: str = Field(..., env='MONGO_URL')
 
 
+class SentryConfig(BaseSettings):
+    dns: str = Field(..., env='SENTRY_DNS')
+
+
 app_config = AppConfig()
 auth_config = AuthConfig()
 mongo_config = MongoConfig()
+sentry_config = SentryConfig()
