@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 sentry_sdk.init(
-    dsn=sentry_config.dsn,
+    dsn=sentry_config.dns,
     traces_sample_rate=0.4,
 )
 
