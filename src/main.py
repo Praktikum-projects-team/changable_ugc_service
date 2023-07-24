@@ -1,6 +1,7 @@
 import logging
 from http import HTTPStatus
 
+import sentry_sdk
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.exception_handlers import http_exception_handler
@@ -9,11 +10,16 @@ from httpx import RequestError
 
 from api.v1 import likes, bookmarks, reviews
 from core.logger import LOGGING
-from core.config import app_config
+from core.config import app_config, sentry_config
 
 from dotenv import load_dotenv
 
 load_dotenv()
+
+sentry_sdk.init(
+    dsn=sentry_config.dsn,
+    traces_sample_rate=0.4,
+)
 
 app = FastAPI(
     title=app_config.project_name,
