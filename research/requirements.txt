@@ -1,2 +1,4 @@
 faker==19.1.0
-pymongo=4.4.1
+pymongo==4.4.1
+psycopg2==2.9.6
+psycopg2-binary==2.9.6
