@@ -10,7 +10,7 @@ from httpx import RequestError
 
 from api.v1 import likes, bookmarks, reviews, internal
 from core.logger import LOGGING
-from core.config import (app_config, sentry_config)
+from core.config import app_config, sentry_config
 
 from dotenv import load_dotenv
 
