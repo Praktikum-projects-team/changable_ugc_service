@@ -16,10 +16,14 @@ class BookmarkService:
 
         return {'msg': f'Movie {data.film_id} is already in bookmarks'}
 
-    async def get_all(self, user_id, page: Page):
+    async def get_all(self, user_id, page: Page = None):
         bookmarks_list = []
-        async for bookmark in self.collection.find({"user_id": user_id}).skip(page.page_from).limit(page.page_size):
-            bookmarks_list.append(bookmark['film_id'])
+        if page:
+            async for bookmark in self.collection.find({"user_id": user_id}).skip(page.page_from).limit(page.page_size):
+                bookmarks_list.append(bookmark['film_id'])
+        else:
+            async for bookmark in self.collection.find({"user_id": user_id}):
+                bookmarks_list.append(bookmark['film_id'])
 
         return bookmarks_list
 
