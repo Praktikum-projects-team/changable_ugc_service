@@ -31,7 +31,7 @@ class MongoConfig(BaseSettings):
 
 
 class SentryConfig(BaseSettings):
-    dns: str = Field(..., env='SENTRY_DNS')
+    dns: str = Field(..., env='SENTRY_DSN')
 
 
 app_config = AppConfig()

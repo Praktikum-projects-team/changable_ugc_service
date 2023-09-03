@@ -29,7 +29,8 @@ async def get_bookmarks(
     description='Добавление фильма в закладки',
     dependencies=[Depends(BaseJWTBearer())]
 )
-async def add_bookmark(data: BookmarkReq, request: Request, bookmark_service: BookmarkService = Depends(get_bookmark_service)):
+async def add_bookmark(data: BookmarkReq, request: Request,
+                       bookmark_service: BookmarkService = Depends(get_bookmark_service)):
     current_user = request.token_payload
     res = await bookmark_service.post_bookmark(data, current_user['id'])
     return res
@@ -40,9 +41,8 @@ async def add_bookmark(data: BookmarkReq, request: Request, bookmark_service: Bo
     description='Удаление фильма из закладок',
     dependencies=[Depends(BaseJWTBearer())]
 )
-async def delete_bookmark(data: BookmarkReq, request: Request, bookmark_service: BookmarkService = Depends(get_bookmark_service)):
+async def delete_bookmark(data: BookmarkReq, request: Request,
+                          bookmark_service: BookmarkService = Depends(get_bookmark_service)):
     current_user = request.token_payload
     res = await bookmark_service.delete_bookmark(data, current_user['id'])
     return res
-
-
